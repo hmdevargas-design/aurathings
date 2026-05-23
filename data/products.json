@@ -1,0 +1,74 @@
+[
+  {
+    "slug": "lumina",
+    "name": "Lumina",
+    "category": "Candeeiro de mesa",
+    "priceFrom": 129,
+    "image": "aurathings/foto3.png",
+    "page": "products/lumina.html",
+    "productionTime": "5-10 dias uteis",
+    "materials": ["PLA premium", "PETG"],
+    "colors": ["Branco quente", "Areia", "Perola"],
+    "cta": "Pedir orcamento"
+  },
+  {
+    "slug": "solsticio",
+    "name": "Solsticio",
+    "category": "Candeeiro de teto",
+    "priceFrom": 189,
+    "image": "aurathings/foto6.png",
+    "page": "products/solsticio.html",
+    "productionTime": "7-12 dias uteis",
+    "materials": ["PLA premium", "PETG"],
+    "colors": ["Rosa seco", "Bronze", "Branco opalino"],
+    "cta": "Pedir orcamento"
+  },
+  {
+    "slug": "ambar",
+    "name": "Ambar",
+    "category": "Candeeiro de mesa",
+    "priceFrom": 149,
+    "image": "aurathings/foto5.png",
+    "page": "products/ambar.html",
+    "productionTime": "5-10 dias uteis",
+    "materials": ["PLA premium"],
+    "colors": ["Pessego", "Terracota", "Marfim"],
+    "cta": "Pedir orcamento"
+  },
+  {
+    "slug": "vortex",
+    "name": "Vortex",
+    "category": "Candeeiro de teto",
+    "priceFrom": 219,
+    "image": "aurathings/foto7.png",
+    "page": "products/vortex.html",
+    "productionTime": "10-15 dias uteis",
+    "materials": ["PLA premium", "PETG"],
+    "colors": ["Branco mineral", "Dourado suave", "Rosa queimado"],
+    "cta": "Pedir orcamento"
+  },
+  {
+    "slug": "coral",
+    "name": "Coral",
+    "category": "Candeeiro de mesa",
+    "priceFrom": 159,
+    "image": "aurathings/foto2.jpg",
+    "page": "products/coral.html",
+    "productionTime": "7-12 dias uteis",
+    "materials": ["PLA premium"],
+    "colors": ["Marfim", "Areia", "Coral suave"],
+    "cta": "Pedir orcamento"
+  },
+  {
+    "slug": "aura-pendant",
+    "name": "Aura Pendant",
+    "category": "Candeeiro de teto",
+    "priceFrom": 199,
+    "image": "aurathings/foto4.png",
+    "page": "products/aura-pendant.html",
+    "productionTime": "7-12 dias uteis",
+    "materials": ["PLA premium", "PETG"],
+    "colors": ["Branco translucido", "Fumado claro", "Champagne"],
+    "cta": "Pedir orcamento"
+  }
+]
