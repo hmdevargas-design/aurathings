@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AuraThings — Candeeiros Designer Impressão 3D</title>
+  <meta name="description" content="Candeeiros criados para quem escolhe com intenção. Design atemporal, impressão 3D, feito em Portugal.">
+
+  <!-- Google Fonts: Playfair Display + Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================================
+       CSS CUSTOM PROPERTIES — Edit here to retheme globally
+    ============================================================ */
+    :root {
+      --bg:            #FAFAF8;
+      --text-primary:  #1A1A18;
+      --text-secondary:#6B6B64;
+      --accent:        #C8A97E;
+      --border:        #E8E7E2;
+      --dark:          #1A1A18;
+      --white:         #FFFFFF;
+
+      --serif:  'Playfair Display', Georgia, serif;
+      --sans:   'Inter', system-ui, -apple-system, sans-serif;
+
+      --ease:   0.3s ease;
+      --max-w:  1280px;
+      --px:     clamp(1.25rem, 5vw, 4rem);
+    }
+
+    /* ============================================================
+       RESET
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: var(--sans);
+      font-weight: 400;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+    ul, ol { list-style: none; }
+
+    /* ============================================================
+       ACCESSIBILITY
+    ============================================================ */
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .sr-only {
+      position: absolute; width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+
+    /* ============================================================
+       LAYOUT UTILS
+    ============================================================ */
+    .container {
+      width: 100%;
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 var(--px);
+    }
+    .section-pad { padding: clamp(4.5rem, 9vw, 8rem) 0; }
+
+    /* ============================================================
+       TYPOGRAPHY HELPERS
+    ============================================================ */
+    .t-label {
+      font-size: .75rem;
+      font-weight: 500;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .t-disp-xl {
+      font-family: var(--serif);
+      font-size: clamp(3rem, 6.5vw, 6rem);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -.02em;
+    }
+    .t-disp-lg {
+      font-family: var(--serif);
+      font-size: clamp(1.875rem, 3.5vw, 3rem);
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: -.015em;
+    }
+    .t-disp-md {
+      font-family: var(--serif);
+      font-size: clamp(1.375rem, 2.5vw, 2rem);
+      font-weight: 400;
+      line-height: 1.2;
+    }
+
+    /* ============================================================
+       BUTTONS
+    ============================================================ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .875rem 2rem;
+      font-size: .8125rem;
+      font-weight: 500;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      transition: background var(--ease), color var(--ease), border-color var(--ease);
+    }
+    .btn-outline {
+      border: 1px solid var(--text-primary);
+      color: var(--text-primary);
+      background: transparent;
+    }
+    .btn-outline:hover { background: var(--text-primary); color: var(--bg); }
+
+    .btn-outline-light {
+      border: 1px solid rgba(255,255,255,.6);
+      color: var(--white);
+      background: transparent;
+    }
+    .btn-outline-light:hover { background: var(--white); color: var(--dark); }
+
+    /* ============================================================
+       SCROLL FADE-IN — injected by JS
+    ============================================================ */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .75s ease, transform .75s ease;
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* ============================================================
+       SECTION 1 — ANNOUNCEMENT BAR
+    ============================================================ */
+    .announcement-bar {
+      background: var(--dark);
+      color: rgba(255,255,255,.75);
+      text-align: center;
+      padding: .55rem var(--px);
+      font-size: .78125rem;
+      letter-spacing: .05em;
+    }
+    .announcement-bar strong { color: var(--accent); font-weight: 500; }
+
+    /* ============================================================
+       SECTION 1 — NAVIGATION
+       Shopify: header.liquid
+    ============================================================ */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: var(--bg);
+      transition: box-shadow var(--ease), border-color var(--ease);
+    }
+    .site-header.scrolled {
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 2px 16px rgba(26,26,24,.045);
+    }
+
+    .nav-wrap {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      height: 68px;
+    }
+
+    /* Logo */
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 1.4375rem;
+      font-weight: 500;
+      letter-spacing: -.01em;
+      justify-self: start;
+    }
+    .nav-logo em { font-style: normal; color: var(--accent); }
+
+    /* Desktop links — centered column */
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2.25rem;
+    }
+    .nav-links a {
+      font-size: .875rem;
+      color: var(--text-secondary);
+      letter-spacing: .02em;
+      transition: color var(--ease);
+    }
+    .nav-links a:hover { color: var(--text-primary); }
+
+    /* Right actions */
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      justify-self: end;
+    }
+    .nav-cart-btn {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      color: var(--text-primary);
+      transition: color var(--ease);
+    }
+    .nav-cart-btn:hover { color: var(--accent); }
+    .cart-badge {
+      position: absolute;
+      top: 5px; right: 5px;
+      width: 15px; height: 15px;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 50%;
+      font-size: .625rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Mobile hamburger */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      width: 22px;
+      padding: 2px 0;
+    }
+    .nav-hamburger span {
+      display: block;
+      height: 1.5px;
+      background: var(--text-primary);
+      transition: transform var(--ease), opacity var(--ease);
+      transform-origin: center;
+    }
+    .nav-hamburger[aria-expanded="true"] span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .nav-hamburger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+    .nav-hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    /* Mobile drawer */
+    .nav-drawer {
+      display: none;
+      flex-direction: column;
+      border-top: 1px solid var(--border);
+      background: var(--bg);
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height .4s ease;
+    }
+    .nav-drawer.open { max-height: 280px; }
+    .nav-drawer a {
+      display: block;
+      padding: .9375rem var(--px);
+      font-size: .9375rem;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+      transition: color var(--ease);
+    }
+    .nav-drawer a:hover { color: var(--text-primary); }
+
+    @media (max-width: 768px) {
+      .nav-links   { display: none; }
+      .nav-hamburger { display: flex; }
+      .nav-drawer  { display: flex; }
+    }
+
+    /* ============================================================
+       SECTION 2 — HERO
+       Shopify: sections/main-banner.liquid
+    ============================================================ */
+    .hero {
+      overflow: hidden;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: calc(100svh - 68px);
+      align-items: stretch;
+    }
+
+    /* Left: editorial copy */
+    .hero-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: clamp(3rem, 7vw, 6rem) var(--px) clamp(3rem, 7vw, 6rem) var(--px);
+      gap: 1.875rem;
+    }
+    .hero-eyebrow { color: var(--accent); }
+    .hero-headline { color: var(--text-primary); }
+    .hero-sub {
+      font-size: 1.0625rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      max-width: 400px;
+    }
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .hero-scroll-hint {
+      display: flex;
+      align-items: center;
+      gap: .625rem;
+      font-size: .78125rem;
+      letter-spacing: .08em;
+      color: var(--text-secondary);
+    }
+    .hero-scroll-hint::before {
+      content: '';
+      display: block;
+      width: 1px;
+      height: 30px;
+      background: var(--border);
+    }
+
+    /* Right: product image with ambient glow */
+    .hero-media {
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 65% 65% at 50% 55%,
+        rgba(200,169,126,.22) 0%,
+        rgba(200,169,126,.06) 45%,
+        transparent 75%);
+      z-index: 1;
+      pointer-events: none;
+    }
+    .hero-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    @media (max-width: 860px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+      .hero-media {
+        height: 60vw;
+        min-height: 320px;
+        order: -1;
+      }
+      .hero-copy {
+        padding: 3rem var(--px) 3.5rem;
+      }
+    }
+    @media (max-width: 480px) {
+      .hero-media { height: 78vw; }
+    }
+
+    /* ============================================================
+       SECTION 3 — VALUE PROPS
+       Shopify: sections/feature-columns.liquid
+    ============================================================ */
+    .value-section {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .value-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .value-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 3.25rem 1.75rem;
+      gap: 1rem;
+      border-right: 1px solid var(--border);
+    }
+    .value-item:last-child { border-right: none; }
+
+    .value-icon {
+      width: 38px;
+      height: 38px;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+    .value-title {
+      font-family: var(--serif);
+      font-size: 1.0625rem;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    .value-desc {
+      font-size: .875rem;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      max-width: 210px;
+    }
+
+    @media (max-width: 600px) {
+      .value-grid { grid-template-columns: 1fr; }
+      .value-item {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        padding: 2.25rem var(--px);
+      }
+      .value-item:last-child { border-bottom: none; }
+    }
+
+    /* ============================================================
+       SECTION 4 — FEATURED PRODUCTS
+       Shopify: sections/featured-collection.liquid
+    ============================================================ */
+    .section-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 2.75rem;
+    }
+    .section-head-left { display: flex; flex-direction: column; gap: .5rem; }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.75rem;
+    }
+
+    /* Product card */
+    .product-card { display: flex; flex-direction: column; gap: .875rem; }
+
+    .product-thumb {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 4 / 5;
+      background: var(--border);
+    }
+    .product-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .55s ease;
+    }
+    .product-card:hover .product-thumb img { transform: scale(1.045); }
+
+    .product-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 1.5rem;
+      background: linear-gradient(to top, rgba(26,26,24,.42) 0%, transparent 55%);
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity var(--ease), transform var(--ease);
+    }
+    .product-card:hover .product-overlay {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .product-quick {
+      font-size: .78125rem;
+      font-weight: 500;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: #fff;
+      border: 1px solid rgba(255,255,255,.65);
+      padding: .5625rem 1.5rem;
+      background: rgba(255,255,255,.08);
+      backdrop-filter: blur(6px);
+      transition: background var(--ease), color var(--ease);
+    }
+    .product-quick:hover { background: #fff; color: var(--dark); }
+
+    .product-meta { display: flex; flex-direction: column; gap: .3rem; }
+    .product-cat {
+      font-size: .71875rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .product-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+    }
+    .product-name {
+      font-family: var(--serif);
+      font-size: 1.0625rem;
+      font-weight: 400;
+      color: var(--text-primary);
+    }
+    .product-price {
+      font-size: .9375rem;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    @media (max-width: 600px) {
+      .products-grid { grid-template-columns: 1fr; gap: 2.25rem; }
+      .section-head { flex-direction: column; align-items: flex-start; }
+    }
+
+    /* ============================================================
+       SECTION 5 — EDITORIAL / LIFESTYLE
+       Shopify: sections/image-banner.liquid
+    ============================================================ */
+    .editorial {
+      background: var(--dark);
+      color: var(--white);
+    }
+    .editorial-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 2.25rem;
+      padding: clamp(5.5rem, 11vw, 10rem) var(--px);
+    }
+    .editorial-quote {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: clamp(1.625rem, 3.25vw, 2.75rem);
+      font-weight: 400;
+      line-height: 1.35;
+      max-width: 760px;
+      color: var(--white);
+    }
+    .editorial-quote mark {
+      background: none;
+      color: var(--accent);
+    }
+    .editorial-body {
+      font-size: .9375rem;
+      color: rgba(255,255,255,.5);
+      max-width: 440px;
+      line-height: 1.7;
+    }
+
+    /* ============================================================
+       SECTION 6 — ABOUT / BRAND STORY
+       Shopify: sections/rich-text.liquid
+    ============================================================ */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(2.5rem, 6vw, 6rem);
+      align-items: center;
+    }
+    .about-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 1.625rem;
+    }
+    .about-headline { color: var(--text-primary); }
+    .about-body {
+      font-size: .9375rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+    .about-stats {
+      display: flex;
+      gap: 2.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .stat-num {
+      font-family: var(--serif);
+      font-size: 2.125rem;
+      font-weight: 400;
+      color: var(--text-primary);
+      line-height: 1;
+    }
+    .stat-lbl {
+      font-size: .78125rem;
+      color: var(--text-secondary);
+      letter-spacing: .04em;
+      margin-top: .25rem;
+    }
+
+    .about-photo {
+      position: relative;
+      aspect-ratio: 4 / 5;
+      overflow: hidden;
+    }
+    .about-photo::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(200,169,126,.14) 0%, transparent 55%);
+      pointer-events: none;
+    }
+    .about-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    @media (max-width: 760px) {
+      .about-grid { grid-template-columns: 1fr; }
+      .about-photo { aspect-ratio: 3/2; order: -1; }
+    }
+
+    /* ============================================================
+       SECTION 7 — INSTAGRAM / SOCIAL PROOF
+       Shopify: sections/collage.liquid
+    ============================================================ */
+    .social-head {
+      text-align: center;
+      margin-bottom: 2.25rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .625rem;
+    }
+    .social-handle {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1.0625rem;
+      color: var(--text-secondary);
+    }
+    .social-strip-wrap { overflow: hidden; }
+    .social-strip {
+      display: flex;
+      gap: .875rem;
+      overflow-x: auto;
+      padding: 0 var(--px) .5rem;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      -webkit-overflow-scrolling: touch;
+      cursor: grab;
+    }
+    .social-strip::-webkit-scrollbar { display: none; }
+    .social-strip.dragging { cursor: grabbing; user-select: none; }
+
+    .social-tile {
+      flex-shrink: 0;
+      width: clamp(170px, 22vw, 270px);
+      aspect-ratio: 1;
+      overflow: hidden;
+      background: var(--border);
+    }
+    .social-tile img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(.94) saturate(.85);
+      transition: filter .45s ease, transform .5s ease;
+    }
+    .social-tile:hover img {
+      filter: brightness(1) saturate(1.05);
+      transform: scale(1.04);
+    }
+
+    /* ============================================================
+       SECTION 8 — FOOTER
+       Shopify: sections/footer.liquid
+    ============================================================ */
+    .site-footer {
+      border-top: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .footer-main {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1fr 1fr;
+      gap: 3rem;
+      padding: clamp(3rem, 6vw, 5rem) 0 3rem;
+    }
+    .footer-brand { display: flex; flex-direction: column; gap: 1rem; }
+    .footer-logo {
+      font-family: var(--serif);
+      font-size: 1.3125rem;
+      font-weight: 500;
+    }
+    .footer-logo em { font-style: normal; color: var(--accent); }
+    .footer-tagline {
+      font-size: .875rem;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      max-width: 230px;
+    }
+
+    /* Social icons */
+    .footer-socials { display: flex; gap: .75rem; margin-top: .375rem; }
+    .footer-soc {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px; height: 34px;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      transition: border-color var(--ease), color var(--ease);
+    }
+    .footer-soc:hover { border-color: var(--accent); color: var(--accent); }
+
+    .footer-col-head {
+      font-size: .71875rem;
+      font-weight: 600;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      color: var(--text-primary);
+      margin-bottom: 1.125rem;
+    }
+    .footer-links { display: flex; flex-direction: column; gap: .625rem; }
+    .footer-links a {
+      font-size: .875rem;
+      color: var(--text-secondary);
+      transition: color var(--ease);
+    }
+    .footer-links a:hover { color: var(--text-primary); }
+
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .footer-copy { font-size: .8125rem; color: var(--text-secondary); }
+    .footer-legal { display: flex; gap: 1.5rem; }
+    .footer-legal a {
+      font-size: .8125rem;
+      color: var(--text-secondary);
+      transition: color var(--ease);
+    }
+    .footer-legal a:hover { color: var(--text-primary); }
+
+    @media (max-width: 900px) {
+      .footer-main { grid-template-columns: 1fr 1fr; }
+      .footer-brand { grid-column: 1 / -1; }
+    }
+    @media (max-width: 480px) {
+      .footer-main { grid-template-columns: 1fr; gap: 2.25rem; }
+      .footer-brand { grid-column: auto; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       ANNOUNCEMENT BAR
+  ============================================================ -->
+  <div class="announcement-bar" role="status" aria-label="Informação de envio">
+    Envio gratuito em Portugal para encomendas acima de <strong>€80</strong>&nbsp;·&nbsp;Feito em Portugal, enviado para todo o mundo
+  </div>
+
+  <!-- ============================================================
+       SECTION 1 — NAV
+       Shopify: header.liquid
+  ============================================================ -->
+  <header class="site-header" id="site-header">
+    <div class="container nav-wrap">
+
+      <!-- Logo -->
+      <a href="/" class="nav-logo" aria-label="AuraThings — Ir para a página inicial">
+        Aura<em>Things</em>
+      </a>
+
+      <!-- Desktop centre nav -->
+      <nav aria-label="Navegação principal">
+        <ul class="nav-links">
+          <li><a href="#products">Lâmpadas de Mesa</a></li>
+          <li><a href="#products">Lâmpadas de Teto</a></li>
+          <li><a href="#about">Sobre Nós</a></li>
+        </ul>
+      </nav>
+
+      <!-- Right: cart + hamburger -->
+      <div class="nav-actions">
+        <a href="/cart" class="nav-cart-btn" aria-label="Carrinho, 2 artigos">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="1.5"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 01-8 0"/>
+          </svg>
+          <span class="cart-badge" aria-hidden="true">2</span>
+        </a>
+        <button class="nav-hamburger" id="nav-toggle"
+                aria-expanded="false" aria-controls="nav-drawer"
+                aria-label="Abrir menu de navegação">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <nav id="nav-drawer" class="nav-drawer" aria-label="Menu mobile" aria-hidden="true">
+      <a href="#products">Lâmpadas de Mesa</a>
+      <a href="#products">Lâmpadas de Teto</a>
+      <a href="#about">Sobre Nós</a>
+      <a href="/cart">Carrinho</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ============================================================
+         SECTION 2 — HERO
+         Shopify: sections/main-banner.liquid
+    ============================================================ -->
+    <section class="hero" aria-label="Destaque da coleção">
+      <div class="hero-grid">
+
+        <!-- Left: copy -->
+        <div class="hero-copy">
+          <p class="t-label hero-eyebrow">Nova Coleção — 2025</p>
+
+          <h1 class="t-disp-xl hero-headline">
+            Luz que<br>define o<br>espaço.
+          </h1>
+
+          <p class="hero-sub">
+            Design atemporal. Impressão 3D.<br>Feito para durar.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#products" class="btn btn-outline" aria-label="Explorar a coleção AuraThings">
+              Explorar coleção
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2"
+                   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12"/>
+                <polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </a>
+            <div class="hero-scroll-hint" aria-hidden="true">Scroll</div>
+          </div>
+        </div>
+
+        <!-- Right: image + ambient glow -->
+        <div class="hero-media">
+          <div class="hero-glow" aria-hidden="true"></div>
+          <img
+            class="hero-img"
+            src="aurathings/foto1.jpg"
+            alt="Candeeiro de mesa AuraThings — textura vertical impressa em 3D com luz quente"
+            loading="eager"
+            fetchpriority="high"
+          >
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 3 — VALUE PROPS
+         Shopify: sections/feature-columns.liquid
+    ============================================================ -->
+    <section class="value-section" aria-label="Proposta de valor AuraThings">
+      <div class="container">
+        <ul class="value-grid" role="list">
+
+          <!-- 1 -->
+          <li class="value-item fade-up">
+            <!-- Icon: star / exclusive -->
+            <svg class="value-icon" viewBox="0 0 38 38" fill="none"
+                 stroke="currentColor" stroke-width="1.3"
+                 stroke-linejoin="round" aria-hidden="true">
+              <polygon points="19,3 23.5,13.5 35,13.5 25.5,20.5 29,31 19,24.5 9,31 12.5,20.5 3,13.5 14.5,13.5"/>
+            </svg>
+            <p class="value-title">Design exclusivo</p>
+            <p class="value-desc">Cada peça é criada de raiz por designers independentes — única e irrepetível.</p>
+          </li>
+
+          <!-- 2 -->
+          <li class="value-item fade-up" style="transition-delay:.1s">
+            <!-- Icon: verified / premium -->
+            <svg class="value-icon" viewBox="0 0 38 38" fill="none"
+                 stroke="currentColor" stroke-width="1.3"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="19" cy="19" r="14"/>
+              <polyline points="13,19.5 17,23.5 25,15.5"/>
+            </svg>
+            <p class="value-title">Qualidade premium</p>
+            <p class="value-desc">Materiais de alta durabilidade e acabamentos cuidados em cada detalhe.</p>
+          </li>
+
+          <!-- 3 -->
+          <li class="value-item fade-up" style="transition-delay:.2s">
+            <!-- Icon: light / sun -->
+            <svg class="value-icon" viewBox="0 0 38 38" fill="none"
+                 stroke="currentColor" stroke-width="1.3"
+                 stroke-linecap="round" aria-hidden="true">
+              <circle cx="19" cy="19" r="6"/>
+              <line x1="19" y1="3" x2="19" y2="8"/>
+              <line x1="19" y1="30" x2="19" y2="35"/>
+              <line x1="3"  y1="19" x2="8"  y2="19"/>
+              <line x1="30" y1="19" x2="35" y2="19"/>
+              <line x1="8.05"  y1="8.05"  x2="11.58" y2="11.58"/>
+              <line x1="26.42" y1="26.42" x2="29.95" y2="29.95"/>
+              <line x1="29.95" y1="8.05"  x2="26.42" y2="11.58"/>
+              <line x1="11.58" y1="26.42" x2="8.05"  y2="29.95"/>
+            </svg>
+            <p class="value-title">Luz que transforma</p>
+            <p class="value-desc">A luz certa muda um espaço. Os nossos candeeiros foram criados para isso.</p>
+          </li>
+
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 4 — FEATURED PRODUCTS GRID
+         Shopify: sections/featured-collection.liquid
+    ============================================================ -->
+    <section class="section-pad" id="products" aria-label="Produtos em destaque">
+      <div class="container">
+
+        <div class="section-head">
+          <div class="section-head-left">
+            <p class="t-label">Coleção em destaque</p>
+            <h2 class="t-disp-md">Escolhas da estação</h2>
+          </div>
+          <a href="/collections/all" class="btn btn-outline" aria-label="Ver todos os produtos da loja">
+            Ver todos
+          </a>
+        </div>
+
+        <ul class="products-grid" role="list">
+
+          <!-- Card 1: Lumina -->
+          <li class="fade-up">
+            <article class="product-card" aria-label="Produto: Lumina">
+              <div class="product-thumb">
+                <img
+                  src="aurathings/foto3.png"
+                  alt="Candeeiro de mesa Lumina — esfera em espiral impressa em 3D, acabamento branco"
+                  loading="lazy"
+                >
+                <div class="product-overlay" aria-hidden="true">
+                  <a href="/products/lumina" class="product-quick" tabindex="-1">Ver produto</a>
+                </div>
+              </div>
+              <div class="product-meta">
+                <span class="product-cat">Lâmpada de Mesa</span>
+                <div class="product-row">
+                  <h3 class="product-name">Lumina</h3>
+                  <span class="product-price">€129</span>
+                </div>
+              </div>
+            </article>
+          </li>
+
+          <!-- Card 2: Solstício -->
+          <li class="fade-up" style="transition-delay:.1s">
+            <article class="product-card" aria-label="Produto: Solstício">
+              <div class="product-thumb">
+                <img
+                  src="aurathings/foto6.png"
+                  alt="Candeeiro de teto Solstício — globo rosa texturado com casquilho bronze"
+                  loading="lazy"
+                >
+                <div class="product-overlay" aria-hidden="true">
+                  <a href="/products/solsticio" class="product-quick" tabindex="-1">Ver produto</a>
+                </div>
+              </div>
+              <div class="product-meta">
+                <span class="product-cat">Lâmpada de Teto</span>
+                <div class="product-row">
+                  <h3 class="product-name">Solstício</h3>
+                  <span class="product-price">€189</span>
+                </div>
+              </div>
+            </article>
+          </li>
+
+          <!-- Card 3: Âmbar -->
+          <li class="fade-up" style="transition-delay:.15s">
+            <article class="product-card" aria-label="Produto: Âmbar">
+              <div class="product-thumb">
+                <img
+                  src="aurathings/foto5.png"
+                  alt="Candeeiro de mesa Âmbar — forma oval com linhas diagonais em tom pêssego"
+                  loading="lazy"
+                >
+                <div class="product-overlay" aria-hidden="true">
+                  <a href="/products/ambar" class="product-quick" tabindex="-1">Ver produto</a>
+                </div>
+              </div>
+              <div class="product-meta">
+                <span class="product-cat">Lâmpada de Mesa</span>
+                <div class="product-row">
+                  <h3 class="product-name">Âmbar</h3>
+                  <span class="product-price">€149</span>
+                </div>
+              </div>
+            </article>
+          </li>
+
+          <!-- Card 4: Vórtex -->
+          <li class="fade-up" style="transition-delay:.25s">
+            <article class="product-card" aria-label="Produto: Vórtex">
+              <div class="product-thumb">
+                <img
+                  src="aurathings/foto7.png"
+                  alt="Candeeiro de teto Vórtex — conjunto de três balões suspensos em impressão 3D"
+                  loading="lazy"
+                >
+                <div class="product-overlay" aria-hidden="true">
+                  <a href="/products/vortex" class="product-quick" tabindex="-1">Ver produto</a>
+                </div>
+              </div>
+              <div class="product-meta">
+                <span class="product-cat">Lâmpada de Teto</span>
+                <div class="product-row">
+                  <h3 class="product-name">Vórtex</h3>
+                  <span class="product-price">€219</span>
+                </div>
+              </div>
+            </article>
+          </li>
+
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 5 — EDITORIAL / LIFESTYLE (dark)
+         Shopify: sections/image-banner.liquid
+    ============================================================ -->
+    <section class="editorial" aria-label="Manifesto AuraThings">
+      <div class="container">
+        <div class="editorial-inner">
+
+          <blockquote cite="https://aurathings.pt">
+            <p class="editorial-quote">
+              "Um candeeiro não é apenas uma fonte de luz —
+              é a forma como um espaço <mark>respira</mark>."
+            </p>
+          </blockquote>
+
+          <p class="editorial-body">
+            Cada peça AuraThings nasce de uma obsessão pelo detalhe e da crença
+            de que o design transforma qualquer ambiente numa experiência.
+          </p>
+
+          <a href="#about" class="btn btn-outline-light">
+            A nossa história
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 6 — ABOUT / BRAND STORY
+         Shopify: sections/rich-text.liquid
+    ============================================================ -->
+    <section class="section-pad" id="about" aria-label="Sobre a AuraThings">
+      <div class="container">
+        <div class="about-grid">
+
+          <!-- Left: copy -->
+          <div class="about-copy fade-up">
+            <p class="t-label">Sobre nós</p>
+
+            <h2 class="t-disp-md about-headline">
+              Cada candeeiro nasce de uma ideia. Cada linha tem um propósito.
+            </h2>
+
+            <p class="about-body">
+              A AuraThings nasceu da crença de que objetos belos devem também ser honestos — na sua forma, no seu processo e nos seus materiais. Cada peça é desenhada de raiz e produzida em impressão 3D, um processo que nos permite criar geometrias impossíveis de replicar de outra forma.
+            </p>
+
+            <p class="about-body">
+              Somos uma marca portuguesa, com raízes no design industrial e no amor pela luz como elemento de composição. Criamos candeeiros para quem quer mais do que iluminação — para quem <em>escolhe com intenção</em>.
+            </p>
+
+            <div class="about-stats" aria-label="Factos sobre a AuraThings">
+              <div>
+                <p class="stat-num">200+</p>
+                <p class="stat-lbl">Clientes satisfeitos</p>
+              </div>
+              <div>
+                <p class="stat-num">12</p>
+                <p class="stat-lbl">Modelos exclusivos</p>
+              </div>
+              <div>
+                <p class="stat-num">100%</p>
+                <p class="stat-lbl">Feito em Portugal</p>
+              </div>
+            </div>
+
+            <a href="/about" class="btn btn-outline" aria-label="Conhecer mais sobre a AuraThings">
+              Conhecer mais
+            </a>
+          </div>
+
+          <!-- Right: photo -->
+          <div class="about-photo fade-up" style="transition-delay:.12s">
+            <img
+              src="aurathings/foto2.jpg"
+              alt="Candeeiro AuraThings Coral — forma orgânica em impressão 3D com luz quente"
+              loading="lazy"
+            >
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 7 — INSTAGRAM / SOCIAL PROOF
+         Shopify: sections/collage.liquid
+    ============================================================ -->
+    <section class="section-pad" aria-label="Galeria Instagram">
+      <div class="container social-head">
+        <p class="t-label">Siga-nos</p>
+        <p class="social-handle">@aurathings.pt</p>
+        <p style="font-size:.875rem; color:var(--text-secondary);">
+          A comunidade que nos inspira todos os dias.
+        </p>
+      </div>
+
+      <div class="social-strip-wrap">
+        <div class="social-strip" id="social-strip" role="list" aria-label="Fotografias Instagram">
+          <div class="social-tile fade-up" role="listitem" style="transition-delay:0s">
+            <img src="aurathings/foto1.jpg" alt="Candeeiro cúbico texturado com luz quente — @aurathings.pt" loading="lazy">
+          </div>
+          <div class="social-tile fade-up" role="listitem" style="transition-delay:.06s">
+            <img src="aurathings/foto2.jpg" alt="Candeeiro orgânico Coral iluminado — @aurathings.pt" loading="lazy">
+          </div>
+          <div class="social-tile fade-up" role="listitem" style="transition-delay:.12s">
+            <img src="aurathings/foto3.png" alt="Candeeiro esfera em espiral — @aurathings.pt" loading="lazy">
+          </div>
+          <div class="social-tile fade-up" role="listitem" style="transition-delay:.18s">
+            <img src="aurathings/foto4.png" alt="Candeeiro balão de ar quente — @aurathings.pt" loading="lazy">
+          </div>
+          <div class="social-tile fade-up" role="listitem" style="transition-delay:.24s">
+            <img src="aurathings/foto5.png" alt="Candeeiro oval diagonal tons pêssego — @aurathings.pt" loading="lazy">
+          </div>
+          <div class="social-tile fade-up" role="listitem" style="transition-delay:.30s">
+            <img src="aurathings/foto6.png" alt="Pendente globo rosa texturado — @aurathings.pt" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================
+       SECTION 8 — FOOTER
+       Shopify: sections/footer.liquid
+  ============================================================ -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+
+      <div class="footer-main">
+
+        <!-- Brand -->
+        <div class="footer-brand">
+          <a href="/" class="footer-logo" aria-label="AuraThings — Início">
+            Aura<em>Things</em>
+          </a>
+          <p class="footer-tagline">
+            Candeeiros criados para quem escolhe com intenção. Design atemporal, impressão 3D, feito em Portugal.
+          </p>
+          <div class="footer-socials" aria-label="Redes sociais">
+            <a href="#" class="footer-soc" aria-label="Instagram">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="1.75"
+                   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+              </svg>
+            </a>
+            <a href="#" class="footer-soc" aria-label="Pinterest">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="1.75"
+                   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 2C6.48 2 2 6.48 2 12c0 4.24 2.65 7.86 6.39 9.29-.09-.78-.17-1.98.03-2.83.18-.77 1.19-5.03 1.19-5.03s-.3-.6-.3-1.49c0-1.4.81-2.44 1.82-2.44.86 0 1.27.64 1.27 1.41 0 .86-.55 2.14-.83 3.33-.24 1 .5 1.81 1.48 1.81 1.77 0 3.14-1.87 3.14-4.57 0-2.39-1.72-4.06-4.17-4.06-2.84 0-4.5 2.13-4.5 4.33 0 .86.33 1.78.74 2.28a.3.3 0 01.07.29c-.08.31-.25 1-.28 1.14-.04.18-.14.22-.33.13-1.25-.58-2.03-2.41-2.03-3.88 0-3.15 2.29-6.04 6.6-6.04 3.47 0 6.17 2.47 6.17 5.78 0 3.45-2.17 6.22-5.19 6.22-1.01 0-1.97-.53-2.29-1.15l-.62 2.38c-.23.87-.84 1.96-1.25 2.62.94.29 1.93.45 2.96.45 5.52 0 10-4.48 10-10S17.52 2 12 2z"/>
+              </svg>
+            </a>
+            <a href="#" class="footer-soc" aria-label="Facebook">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="1.75"
+                   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Col: Shop -->
+        <div>
+          <p class="footer-col-head">Loja</p>
+          <ul class="footer-links" role="list">
+            <li><a href="#">Lâmpadas de Mesa</a></li>
+            <li><a href="#">Lâmpadas de Teto</a></li>
+            <li><a href="#">Todas as coleções</a></li>
+            <li><a href="#">Novidades</a></li>
+          </ul>
+        </div>
+
+        <!-- Col: Info -->
+        <div>
+          <p class="footer-col-head">Informação</p>
+          <ul class="footer-links" role="list">
+            <li><a href="#">Sobre nós</a></li>
+            <li><a href="#">Processo criativo</a></li>
+            <li><a href="#">Sustentabilidade</a></li>
+            <li><a href="#">Contacto</a></li>
+          </ul>
+        </div>
+
+        <!-- Col: Help -->
+        <div>
+          <p class="footer-col-head">Ajuda</p>
+          <ul class="footer-links" role="list">
+            <li><a href="#">Envios e entregas</a></li>
+            <li><a href="#">Devoluções</a></li>
+            <li><a href="#">FAQ</a></li>
+            <li><a href="#">Cuidar do produto</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Bottom bar -->
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2025 AuraThings. Todos os direitos reservados.</p>
+        <nav class="footer-legal" aria-label="Links legais">
+          <a href="#">Política de privacidade</a>
+          <a href="#">Termos e condições</a>
+          <a href="#">Cookies</a>
+        </nav>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ============================================================
+       JAVASCRIPT — nav scroll, mobile menu, drag-scroll, fade-in
+  ============================================================ -->
+  <script>
+    // ── Sticky nav border on scroll ───────────────────────────────
+    (function () {
+      const header = document.getElementById('site-header');
+      window.addEventListener('scroll', () => {
+        header.classList.toggle('scrolled', window.scrollY > 8);
+      }, { passive: true });
+    }());
+
+    // ── Mobile nav toggle ─────────────────────────────────────────
+    (function () {
+      const btn    = document.getElementById('nav-toggle');
+      const drawer = document.getElementById('nav-drawer');
+
+      btn.addEventListener('click', () => {
+        const open = drawer.classList.toggle('open');
+        btn.setAttribute('aria-expanded', open);
+        drawer.setAttribute('aria-hidden', !open);
+      });
+
+      // Close when a link is tapped
+      drawer.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => {
+          drawer.classList.remove('open');
+          btn.setAttribute('aria-expanded', 'false');
+          drawer.setAttribute('aria-hidden', 'true');
+        });
+      });
+    }());
+
+    // ── Instagram strip: mouse drag-to-scroll ────────────────────
+    (function () {
+      const strip = document.getElementById('social-strip');
+      let active = false, startX, scrollLeft;
+
+      strip.addEventListener('mousedown', e => {
+        active = true;
+        strip.classList.add('dragging');
+        startX    = e.pageX - strip.offsetLeft;
+        scrollLeft = strip.scrollLeft;
+      });
+      const end = () => { active = false; strip.classList.remove('dragging'); };
+      strip.addEventListener('mouseleave', end);
+      strip.addEventListener('mouseup',    end);
+      strip.addEventListener('mousemove',  e => {
+        if (!active) return;
+        e.preventDefault();
+        const x    = e.pageX - strip.offsetLeft;
+        strip.scrollLeft = scrollLeft - (x - startX) * 1.25;
+      });
+    }());
+
+    // ── Intersection Observer: .fade-up elements ─────────────────
+    (function () {
+      const els = document.querySelectorAll('.fade-up');
+      if (!('IntersectionObserver' in window)) {
+        els.forEach(el => el.classList.add('visible'));
+        return;
+      }
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+      els.forEach(el => io.observe(el));
+    }());
+  </script>
+
+</body>
+</html>

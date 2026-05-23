@@ -1,0 +1,18 @@
+preciso criar um prompt para o claude code para criar uma landing page, tenho diversas referencias de site:
+
+https://www.create-store.com/pt/29185-comprar-novidades-ventiladores-de-teto
+https://shop.mango.com/pt/pt/h/home
+https://ettoredecor.com.br/
+https://www.zarahome.com/pt/search.html?term=candeeiros
+https://www.westwing.pt/
+
+a ideia é lembrar esses sites acima e tambem o tema dawn do shopify, que provavelmente sera usado no futuro na loja
+
+os produto vendido sera basicamente sera candeeiro de teto e de mesa, conforme as fotos.
+
+a descrição das fotos da loja tera como base:
+elegancia, sofistifação, linhas minimalista, refinado, estética atemporal, alta qualidade, luminosidade.
+
+Me ajude a gerar uma descrição com base nessas informações
+
+o foco de cliente será o mesmo cliente que compra os produtos de decoração das lojas citadas acima.

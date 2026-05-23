@@ -1,0 +1,7 @@
+HOW TO PRINT:
+To print the lampshade, you need to:
+-Enable VASE MODE
+-Use 0.4 mm nozzle and set the wall layer WIDTH to 0.65 mm!!!
+-Set the number of bottom layers to 0!!
+-Layer height any, I used 0.28 mm
+If you struggle with the bottom lid clearance, slightly adjust its scale.
